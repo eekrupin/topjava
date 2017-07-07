@@ -10,10 +10,6 @@ import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * GKislin
- * 31.05.2015.
- */
 public class UserMealsUtil {
     public static void main(String[] args) {
         List<UserMeal> mealList = Arrays.asList(
@@ -46,7 +42,7 @@ public class UserMealsUtil {
 
         List<UserMealWithExceed> list = mealList.stream()
                 .filter( userMeal -> TimeUtil.isBetween( userMeal.getDateTime().toLocalTime(), startTime, endTime ) )
-                .map(userMeal-> getUserMealWithExceed(caloriesPerDay, daysMap, userMeal))
+                .map(userMeal-> getUserMealWithExceed(userMeal, getExceed(daysMap, userMeal.getDateTime().toLocalDate(), caloriesPerDay)))
                 .collect(Collectors.toList());
 
         return list;
@@ -63,17 +59,22 @@ public class UserMealsUtil {
             for (UserMeal userMeal:mealList) {
                 Boolean isTheRightTime = TimeUtil.isBetween(userMeal.getDateTime().toLocalTime(), startTime, endTime);
                 if (isTheRightTime) {
-                    list.add(getUserMealWithExceed(caloriesPerDay, daysMap, userMeal));
+                    Boolean exceed = getExceed(daysMap, userMeal.getDateTime().toLocalDate(), caloriesPerDay);
+                    list.add( getUserMealWithExceed(userMeal, exceed) );
                 }
             }
         return list;
     }
 
-    private static UserMealWithExceed getUserMealWithExceed(int caloriesPerDay, Map<LocalDate, Integer> daysMap, UserMeal userMeal) {
+    private static UserMealWithExceed getUserMealWithExceed(UserMeal userMeal, Boolean exceed) {
         return new UserMealWithExceed(userMeal.getDateTime(),
                 userMeal.getDescription(),
                 userMeal.getCalories(),
-                daysMap.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay);
+                exceed);
+    }
+
+    private static Boolean getExceed(Map<LocalDate, Integer> daysMap, LocalDate date, int caloriesPerDay){
+        return daysMap.getOrDefault(date, 0) > caloriesPerDay;
     }
 
 }
