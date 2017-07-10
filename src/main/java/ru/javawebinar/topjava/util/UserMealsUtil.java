@@ -25,7 +25,7 @@ public class UserMealsUtil {
 
         System.out.println();
         System.out.println("Second realization with loop");
-        List<UserMealWithExceed> getFilteredWithExceeded_WithLoop = getFilteredWithExceeded_WithLoop(mealList, LocalTime.of(7, 0), LocalTime.of(12,0), 2000);
+        List<UserMealWithExceed> getFilteredWithExceeded_WithLoop = getFilteredWithExceededWithLoop(mealList, LocalTime.of(7, 0), LocalTime.of(12,0), 2000);
         getFilteredWithExceeded_WithLoop.forEach(System.out::println);
 
     }
@@ -44,7 +44,7 @@ public class UserMealsUtil {
                 .collect(Collectors.toList());
     }
 
-    private static List<UserMealWithExceed>  getFilteredWithExceeded_WithLoop(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    private static List<UserMealWithExceed>  getFilteredWithExceededWithLoop(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
         Map<LocalDate, Integer> daysMap = new HashMap<>();
         mealList.forEach(userMeal->daysMap.merge(userMeal.getDateTime().toLocalDate(), userMeal.getCalories(), Integer::sum));
