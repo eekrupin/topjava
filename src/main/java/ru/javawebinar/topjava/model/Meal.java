@@ -1,10 +1,12 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.dao.ObjectDB;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class Meal {
+public class Meal implements ObjectDB {
 
     private int id;
 

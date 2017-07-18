@@ -46,7 +46,7 @@
 <hl>Добавить еду</hl>
 
 <form method="POST" action='meals' name="frmAddMeal">
-    Meal ID : <input type="text" readonly="readonly" name="id"
+    <input type="hidden" readonly="readonly" name="id"
                      value="<c:out value="${meal.id}" />" /> <br />
     Description : <input
         type="text" name="description"
