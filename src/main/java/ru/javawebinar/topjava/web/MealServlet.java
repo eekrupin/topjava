@@ -41,7 +41,6 @@ public class MealServlet extends HttpServlet{
             int mealId = Integer.parseInt( request.getParameter("mealId") );
             log.debug("delete meal: " + mealId);
             dao.delete(mealId);
-            request.setAttribute("meals", MealsUtil.getMealsWithExceed( dao.getObjectsDB() ) );
             response.sendRedirect("meals");
         }
         else if (action.equalsIgnoreCase ("edit")){
@@ -79,7 +78,6 @@ public class MealServlet extends HttpServlet{
             dao.add(meal);
         }
 
-        request.setAttribute("meals", MealsUtil.getMealsWithExceed( dao.getObjectsDB() ) );
         response.sendRedirect("meals");
     }
 

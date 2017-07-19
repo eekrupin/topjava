@@ -51,7 +51,7 @@
     Description : <input
         type="text" name="description"
         value="<c:out value="${meal.description}" />" /> <br />
-    Caloriese : <input
+    Calories : <input
         type= "number" name="calories"
         value="<c:out value="${meal.calories}" />" /> <br />
     Date : <input
