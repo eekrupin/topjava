@@ -72,9 +72,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, int userId) {
+    public Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalDate endDate, int userId) {
         return getAll(userId).stream()
-                .filter(meal -> DateTimeUtil.isBetween(meal.getDateTime(), startDate, startTime, endDate, endTime) )
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate) )
                 .sorted(MEAL_COMPARATOR.reversed())
                 .collect(Collectors.toList());
     }

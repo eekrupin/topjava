@@ -49,7 +49,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, int userId) {
-        return repository.getFilteredByPeriod(startDate, startTime, endDate, endTime, userId);
+    public Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalDate endDate, int userId) {
+        return repository.getFilteredByPeriod(startDate, endDate, userId);
     }
 }

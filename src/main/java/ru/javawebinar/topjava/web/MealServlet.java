@@ -86,11 +86,13 @@ public class MealServlet extends HttpServlet {
                     Map<String, Object> params = getParamsFromRequest(request);
                     log.info("getFilteredByPeriod {}", params);
                     setRequestAttributes(request, params);
-                    meals = MealsUtil.getWithExceeded(controller.getFilteredByPeriod(
-                            (LocalDate)params.get("dateFrom"),
-                            (LocalTime)params.get("timeFrom"),
-                            (LocalDate)params.get("dateTo"),
-                            (LocalTime)params.get("timeTo") ), MealsUtil.DEFAULT_CALORIES_PER_DAY);
+
+                    LocalTime startTime =  params.get("timeFrom") ==null ? LocalTime.MIN : (LocalTime)params.get("timeFrom");
+                    LocalTime endTime =  params.get("timeTo")==null ? LocalTime.MAX : (LocalTime)params.get("timeTo");
+
+                    meals = MealsUtil.getFilteredWithExceeded(controller.getFilteredByPeriod(
+                            (LocalDate)params.get("dateFrom"), (LocalDate)params.get("dateTo")
+                        ), startTime, endTime, MealsUtil.DEFAULT_CALORIES_PER_DAY);
                 }
                 else {
                     log.info("getAll");

@@ -44,9 +44,9 @@ public class MealRestController {
         return service.getAll(AuthorizedUser.id());
     }
 
-    public Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
-        log.info("getFilteredByPeriod startDate {}, startTime {}, endDate {}, endDate {}, user {}", startDate, startTime, endDate, endTime, AuthorizedUser.id());
-        return service.getFilteredByPeriod(startDate, startTime, endDate, endTime, AuthorizedUser.id());
+    public Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalDate endDate) {
+        log.info("getFilteredByPeriod startDate {}, endDate {}, user {}", startDate, endDate, AuthorizedUser.id());
+        return service.getFilteredByPeriod(startDate, endDate, AuthorizedUser.id());
     }
 
 }

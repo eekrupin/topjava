@@ -12,17 +12,12 @@ public class DateTimeUtil {
         return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <= 0;
     }
 
-    public static boolean isBetween(LocalDateTime analyzedDateTime, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
-        LocalDate analyzedDate = analyzedDateTime.toLocalDate();
-        LocalTime analyzedTime = analyzedDateTime.toLocalTime();
+    public static boolean isBetween(LocalDate analyzedDate, LocalDate startDate, LocalDate endDate) {
 
         Boolean matchingStartDate = startDate == null || analyzedDate.compareTo(startDate) >= 0;
         Boolean matchingEndDate = endDate == null || analyzedDate.compareTo(endDate) <= 0;
 
-        Boolean matchingStartTime = startTime == null || analyzedTime.compareTo(startTime) >= 0;
-        Boolean matchingEndTime = endTime == null || analyzedTime.compareTo(endTime) <= 0;
-
-        return matchingStartDate && matchingEndDate && matchingStartTime && matchingEndTime;
+        return matchingStartDate && matchingEndDate;
     }
 
     public static String toString(LocalDateTime ldt) {

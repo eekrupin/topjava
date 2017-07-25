@@ -21,6 +21,6 @@ public interface MealService {
 
     Collection<Meal> getAll(int userId);
 
-    Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, int userId);
+    Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalDate endDate, int userId);
 
 }
