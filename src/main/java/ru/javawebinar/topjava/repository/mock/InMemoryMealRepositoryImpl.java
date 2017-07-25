@@ -7,11 +7,11 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import static ru.javawebinar.topjava.util.ValidationUtil.*;
 
 import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.PRE_DEFINE_ADMIN;
-import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.PRE_DEFINE_USER;
 
 
 @Repository
@@ -38,19 +37,16 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             meal.setId(counter.incrementAndGet());
             meal.setUserId(userId);
         }
-        else meal = getMealWithUserId(meal, userId);
+        else {
+            Meal mealDB = repository.get(meal.getId());
+            if (mealDB==null || !Objects.equals(mealDB.getUserId(), userId)) meal = null;
+            else meal.setUserId(userId);
+        }
 
         if (meal != null) repository.put(meal.getId(), meal);
         return meal;
     }
 
-    private Meal getMealWithUserId(Meal meal, Integer userId) {
-        Meal mealDB = repository.get(meal.getId());
-        checkNotFound(mealDB!=null, "Meal not found with id: " + meal.getId());
-        if (mealDB.getUserId()!=userId) meal = null;
-        else meal.setUserId(userId);
-        return meal;
-    }
 
     @Override
     public boolean delete(int id, int userId) {
@@ -76,10 +72,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getFilteredByPeiod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, int userId) {
-        return repository.values().stream()
-                .filter(meal -> meal.getUserId() == userId &&
-                        DateTimeUtil.isBetween(meal.getDateTime(), startDate, startTime, endDate, endTime) ) //перегруженный метод
+    public Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, int userId) {
+        return getAll(userId).stream()
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDateTime(), startDate, startTime, endDate, endTime) )
                 .sorted(MEAL_COMPARATOR.reversed())
                 .collect(Collectors.toList());
     }

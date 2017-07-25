@@ -29,9 +29,9 @@ public class MealRestController {
         return save(meal);
     }
 
-    public boolean delete(int id) {
+    public void delete(int id) {
         log.info("delete {} user {}", id, AuthorizedUser.id());
-        return service.delete(id, AuthorizedUser.id());
+        service.delete(id, AuthorizedUser.id());
     }
 
     public Meal get(int id) {
@@ -44,9 +44,9 @@ public class MealRestController {
         return service.getAll(AuthorizedUser.id());
     }
 
-    public Collection<Meal> getFilteredByPeiod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
-        log.info("getFilteredByPeiod startDate {}, startTime {}, endDate {}, endDate {}, user {}", startDate, startTime, endDate, endTime, AuthorizedUser.id());
-        return service.getFilteredByPeiod(startDate, startTime, endDate, endTime, AuthorizedUser.id());
+    public Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        log.info("getFilteredByPeriod startDate {}, startTime {}, endDate {}, endDate {}, user {}", startDate, startTime, endDate, endTime, AuthorizedUser.id());
+        return service.getFilteredByPeriod(startDate, startTime, endDate, endTime, AuthorizedUser.id());
     }
 
 }

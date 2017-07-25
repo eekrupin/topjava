@@ -19,6 +19,6 @@ public interface MealRepository {
 
     Collection<Meal> getAll(int userId);
 
-    Collection<Meal> getFilteredByPeiod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, int userId);
+    Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, int userId);
 
 }

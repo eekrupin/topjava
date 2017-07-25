@@ -1,14 +1,10 @@
 package ru.javawebinar.topjava.web;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -37,7 +33,6 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        //repository = new InMemoryMealRepositoryImpl();
         appCtx = new ClassPathXmlApplicationContext("/spring/spring-app.xml");
         controller = appCtx.getBean(MealRestController.class);
     }
@@ -89,9 +84,9 @@ public class MealServlet extends HttpServlet {
                 List<MealWithExceed> meals;
                 if (setFilter) {
                     Map<String, Object> params = getParamsFromRequest(request);
-                    log.info("getFilteredByPeiod {}", params);
+                    log.info("getFilteredByPeriod {}", params);
                     setRequestAttributes(request, params);
-                    meals = MealsUtil.getWithExceeded(controller.getFilteredByPeiod(
+                    meals = MealsUtil.getWithExceeded(controller.getFilteredByPeriod(
                             (LocalDate)params.get("dateFrom"),
                             (LocalTime)params.get("timeFrom"),
                             (LocalDate)params.get("dateTo"),

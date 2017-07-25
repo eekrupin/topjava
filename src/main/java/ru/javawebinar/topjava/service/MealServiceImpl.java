@@ -31,10 +31,9 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public boolean delete(int id, int userId) {
+    public void delete(int id, int userId) {
         boolean res = repository.delete(id, userId);
         checkNotFound(res, "wrong meal by id: " + id);
-        return res;
     }
 
     @Override
@@ -50,7 +49,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Collection<Meal> getFilteredByPeiod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, int userId) {
-        return repository.getFilteredByPeiod(startDate, startTime, endDate, endTime, userId);
+    public Collection<Meal> getFilteredByPeriod(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, int userId) {
+        return repository.getFilteredByPeriod(startDate, startTime, endDate, endTime, userId);
     }
 }
