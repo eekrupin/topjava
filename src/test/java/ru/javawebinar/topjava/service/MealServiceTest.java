@@ -109,16 +109,16 @@ public class MealServiceTest {
 
     @Test
     public void getBetweenDates() throws Exception {
-        LocalDate start = LocalDate.of(2015, 05, 31);
-        LocalDate end = LocalDate.of(2015, 05, 31);
+        LocalDate start = LocalDate.of(2015, 5, 31);
+        LocalDate end = LocalDate.of(2015, 5, 31);
         List<Meal> betweenDates = service.getBetweenDates(start, end, USER_ID);
         MATCHER.assertCollectionEquals( Arrays.asList(MEALS.get(0), MEALS.get(1), MEALS.get(2)), betweenDates);
     }
 
     @Test
     public void getBetweenDateTimes() throws Exception {
-        LocalDateTime start = LocalDateTime.of( LocalDate.of(2015, 05, 30), LocalTime.of(13,0) );
-        LocalDateTime end = LocalDateTime.of( LocalDate.of(2015, 05, 31), LocalTime.of(13,0) );
+        LocalDateTime start = LocalDateTime.of( LocalDate.of(2015, 5, 30), LocalTime.of(13,0) );
+        LocalDateTime end = LocalDateTime.of( LocalDate.of(2015, 5, 31), LocalTime.of(13,0) );
         List<Meal> betweenDateTimes = service.getBetweenDateTimes(start, end, USER_ID);
         MATCHER.assertCollectionEquals( Arrays.asList(
                 MEALS.get(1),

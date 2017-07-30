@@ -23,8 +23,6 @@ public class MealTestData {
             new Meal(sequence++, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500)
     );
 
-    public static final BeanMatcher<Meal> MATCHER = new BeanMatcher<>(
-            (expected, actual) -> expected == actual || expected.toString().equals(actual.toString())
-    );
+    public static final BeanMatcher<Meal> MATCHER = new BeanMatcher<>();
 
 }
