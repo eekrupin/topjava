@@ -128,4 +128,19 @@ public class User extends NamedEntity {
                 ", caloriesPerDay=" + caloriesPerDay +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if ( getId().equals(((User)o).getId()) ) return true;
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + getEmail().hashCode();
+        return result;
+    }
 }

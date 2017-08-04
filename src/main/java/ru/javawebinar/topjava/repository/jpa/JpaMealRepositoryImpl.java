@@ -27,12 +27,11 @@ public class JpaMealRepositoryImpl implements MealRepository {
             em.persist(meal);
             return meal;
         } else {
-
             User UserRef = em.getReference(User.class, userId);
 
             Meal existMeal = em.createNamedQuery(Meal.GET, Meal.class)
                     .setParameter("id", meal.getId())
-                    .setParameter("user_id", userId)
+                    .setParameter("userId", userId)
                     .getSingleResult();
             if (UserRef.equals(existMeal.getUser())){
                 meal.setUser(UserRef);
