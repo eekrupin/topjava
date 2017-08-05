@@ -1,5 +1,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8fda76283f8647b7b16d0535b84e4d29)](https://www.codacy.com/app/eekrupin/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=eekrupin/topjava&amp;utm_campaign=Badge_Grade)
 
+[![Dependency Status](https://dependencyci.com/github/eekrupin/topjava/badge)](https://dependencyci.com/github/eekrupin/topjava)
+
 Java Enterprise Online Project 
 ===============================
 Разработка полнофункционального Spring/JPA Enterprise приложения c авторизацией и правами доступа на основе ролей с использованием наиболее популярных инструментов и технологий Java: Maven, Spring MVC, Security, JPA(Hibernate), REST(Jackson), Bootstrap (css,js), datatables, jQuery + plugins, Java 8 Stream and Time API и хранением в базах данных Postgresql и HSQLDB.
