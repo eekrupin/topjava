@@ -131,8 +131,15 @@ public class User extends NamedEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if ( getId().equals(((User)o).getId()) ) return true;
+        if (o == null) {
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
+        if ( getId().equals(((User)o).getId()) ) {
+            return true;
+        }
 
         return false;
     }

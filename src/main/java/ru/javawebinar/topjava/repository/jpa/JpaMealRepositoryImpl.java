@@ -28,27 +28,28 @@ public class JpaMealRepositoryImpl implements MealRepository {
             em.persist(meal);
             return meal;
         } else {
+            Meal existMeal = getExistMeal(meal.getId(), userId);
             User UserRef = em.getReference(User.class, userId);
-
-            List<Meal> meals = em.createNamedQuery(Meal.GET, Meal.class)
-                    .setParameter("id", meal.getId())
-                    .setParameter("userId", userId)
-                    .getResultList();
-            Meal existMeal;
-            if (meals.size()==1){
-                existMeal = meals.get(0);
-            }
-            else {
-                return null;
-            }
-
-            if (UserRef.equals(existMeal.getUser())){
+            if (existMeal != null && UserRef.equals(existMeal.getUser())){
                 meal.setUser(UserRef);
                 return em.merge(meal);
             }
             else {
                 return null;
             }
+        }
+    }
+
+    private Meal getExistMeal(int id, int userId){
+        List<Meal> meals = em.createNamedQuery(Meal.GET, Meal.class)
+                .setParameter("id", id)
+                .setParameter("userId", userId)
+                .getResultList();
+        if (meals.size()==1){
+            return meals.get(0);
+        }
+        else {
+            return null;
         }
     }
 
