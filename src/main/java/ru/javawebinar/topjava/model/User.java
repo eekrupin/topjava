@@ -129,25 +129,4 @@ public class User extends NamedEntity {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        }
-        if (this == o) {
-            return true;
-        }
-        if ( getId().equals(((User)o).getId()) ) {
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + getEmail().hashCode();
-        return result;
-    }
 }

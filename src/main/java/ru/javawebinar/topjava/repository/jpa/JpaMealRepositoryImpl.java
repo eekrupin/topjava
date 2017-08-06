@@ -28,28 +28,14 @@ public class JpaMealRepositoryImpl implements MealRepository {
             em.persist(meal);
             return meal;
         } else {
-            Meal existMeal = getExistMeal(meal.getId(), userId);
-            User UserRef = em.getReference(User.class, userId);
-            if (existMeal != null && UserRef.equals(existMeal.getUser())){
-                meal.setUser(UserRef);
+            Meal existMeal = get(meal.getId(), userId);
+            if ( existMeal != null && userId == existMeal.getUser().getId() ){
+                meal.setUser( em.getReference(User.class, userId) );
                 return em.merge(meal);
             }
             else {
                 return null;
             }
-        }
-    }
-
-    private Meal getExistMeal(int id, int userId){
-        List<Meal> meals = em.createNamedQuery(Meal.GET, Meal.class)
-                .setParameter("id", id)
-                .setParameter("userId", userId)
-                .getResultList();
-        if (meals.size()==1){
-            return meals.get(0);
-        }
-        else {
-            return null;
         }
     }
 
@@ -64,11 +50,11 @@ public class JpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> meals = em.createNamedQuery(Meal.GET, Meal.class)
-                .setParameter("id", id)
-                .setParameter("userId", userId)
-                .getResultList();
-        return DataAccessUtils.singleResult(meals);
+        Meal meal = em.find(Meal.class, id);
+        if (meal == null || !meal.getUser().getId().equals(userId)){
+            meal = null;
+        }
+        return meal;
     }
 
     @Override

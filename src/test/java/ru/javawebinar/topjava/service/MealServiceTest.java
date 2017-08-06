@@ -63,7 +63,7 @@ public class MealServiceTest {
         @Override
         protected void finished(Description description) {
             long duration = getCurrentMillis() - start;
-            System.out.println( String.format("\n-----------Test: '%s'. Duration: %d ms-----------\n", name.getMethodName(), duration) );
+            System.out.println( String.format("\n%s - %d ms\n", name.getMethodName(), duration) );
         }
     };
 
