@@ -15,7 +15,7 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Meal m WHERE m.id=:id and  m.user.id=:userId")
+    @Query(name = Meal.DELETE)
     int delete(@Param("id") int id, @Param("userId") int userId);
 
     @Override
@@ -25,9 +25,10 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Override
     Meal findOne(Integer integer);
 
-    List<Meal> findAllByUser_Id(int userId);
+    @Query(name = Meal.ALL_SORTED)
+    List<Meal> getAllByUserId(@Param("userId") int userId);
 
-    @Query(Meal.GET_BETWEEN)
-    List<Meal> getAll(LocalDateTime startDate, LocalDateTime endDate, int userId);
+    @Query(name = Meal.GET_BETWEEN)
+    List<Meal> getAll(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") int userId);
 
 }
