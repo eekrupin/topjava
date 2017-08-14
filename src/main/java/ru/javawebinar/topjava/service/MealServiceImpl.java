@@ -56,14 +56,9 @@ public class MealServiceImpl implements MealService {
         return repository.save(meal, userId);
     }
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Transactional
     public Meal getWithUser(int id, int user_id){
-        Meal meal = get(id, user_id);
-        meal.setUser(userRepository.get(user_id));
-        return meal;
+        return repository.getWithUser(id, user_id);
     }
 
 }

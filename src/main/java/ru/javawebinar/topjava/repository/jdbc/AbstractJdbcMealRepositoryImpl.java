@@ -84,7 +84,7 @@ public abstract class AbstractJdbcMealRepositoryImpl implements MealRepository {
                 "SELECT * FROM meals WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
     }
 
-    public <T> List<Meal> getBetweenByGeneric(T startDate, T endDate, int userId) {
+    public List<Meal> getBetweenByGeneric(Object  startDate, Object  endDate, int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM meals WHERE user_id=?  AND date_time BETWEEN  ? AND ? ORDER BY date_time DESC",
                 ROW_MAPPER, userId, startDate, endDate);
