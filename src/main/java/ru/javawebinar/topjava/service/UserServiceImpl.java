@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
         // only for evict cache
     }
 
-    @Transactional
+    @Override
     public User getWithMeals(int id){
         return repository.getWithMeals(id);
     }

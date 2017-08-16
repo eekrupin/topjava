@@ -56,7 +56,7 @@ public class MealServiceImpl implements MealService {
         return repository.save(meal, userId);
     }
 
-    @Transactional
+    @Override
     public Meal getWithUser(int id, int user_id){
         return repository.getWithUser(id, user_id);
     }
