@@ -30,6 +30,11 @@ public class RootController {
     public String setUser(HttpServletRequest request) {
         int userId = Integer.valueOf(request.getParameter("userId"));
         AuthorizedUser.setId(userId);
-        return "redirect:meals";
+        return "redirect:/meals";
+    }
+
+    @RequestMapping(value = "/meals")
+    public String getAll(HttpServletRequest request) {
+        return "redirect:meals/getAll";
     }
 }
