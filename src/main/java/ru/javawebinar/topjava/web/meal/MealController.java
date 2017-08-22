@@ -24,7 +24,7 @@ public class MealController extends AbstractMealController{
     public String delete(HttpServletRequest request){
         int id = getId(request);
         super.delete(id);
-        return "redirect:/getAll";
+        return "redirect:/meals";
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -41,13 +41,13 @@ public class MealController extends AbstractMealController{
         return "mealForm";
     }
 
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public String getAll(HttpServletRequest request){
         request.setAttribute("meals", super.getAll());
         return "meals";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public String createUpdate(HttpServletRequest request){
         //request.setCharacterEncoding("UTF-8");
         Meal meal = new Meal(

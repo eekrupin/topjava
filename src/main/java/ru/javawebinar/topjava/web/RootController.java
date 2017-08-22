@@ -33,8 +33,8 @@ public class RootController {
         return "redirect:/meals";
     }
 
-    @RequestMapping(value = "/meals")
-    public String getAll(HttpServletRequest request) {
-        return "redirect:meals/getAll";
-    }
+//    @RequestMapping(value = "/meals")
+//    public String getAll(HttpServletRequest request) {
+//        return "redirect:meals/getAll";
+//    }
 }
