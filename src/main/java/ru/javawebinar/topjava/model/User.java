@@ -128,6 +128,10 @@ public class User extends AbstractNamedEntity {
         return roles;
     }
 
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     public String getPassword() {
         return password;
     }
