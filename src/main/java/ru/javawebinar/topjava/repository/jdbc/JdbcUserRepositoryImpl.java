@@ -9,11 +9,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.sql.DataSource;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
 @Repository
 @Transactional(readOnly = true)
@@ -49,8 +51,24 @@ public class JdbcUserRepositoryImpl implements UserRepository {
             namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
                             "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource);
+            deleteRoles(user);
         }
+        insertRoles(user);
         return user;
+    }
+
+    private void deleteRoles(User user) {
+        jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
+    }
+
+    private void insertRoles(User user) {
+        Set<Role> roles = user.getRoles();
+        if (roles.size()==0) {
+            return;
+        }
+        jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", roles, roles.size(),
+                (ps, argument) -> {ps.setInt(1, user.getId());
+                                   ps.setString(2, argument.name()); } );
     }
 
     @Override
@@ -62,18 +80,52 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public User get(int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id);
-        return DataAccessUtils.singleResult(users);
+        User user = DataAccessUtils.singleResult(users);
+        if (user!=null) {
+            user.setRoles(getUserRoles(user.getId()));
+        }
+        return user;
     }
 
     @Override
     public User getByEmail(String email) {
-//        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
-        return DataAccessUtils.singleResult(users);
+        User user = DataAccessUtils.singleResult(users);
+        if (user!=null) {
+            user.setRoles(getUserRoles(user.getId()));
+        }
+        return user;
     }
 
     @Override
     public List<User> getAll() {
-        return jdbcTemplate.query("SELECT * FROM users u ORDER BY name, email", ROW_MAPPER);
+        List<User> users = jdbcTemplate.query("SELECT * FROM users u ORDER BY name, email", ROW_MAPPER);
+        HashMap<Integer, HashSet<Role>> usersRoles = getAllUsersRoles();
+        users.forEach( user -> user.setRoles( usersRoles.getOrDefault( user.getId(), new HashSet<>() ) ) );
+        return users;
+    }
+
+    private HashMap<Integer, HashSet<Role>> getAllUsersRoles() {
+        List<Map<String, Object>> mapListUserRoles = jdbcTemplate.queryForList("SELECT ur.user_id as user_id, ur.role as role FROM user_roles ur");
+        HashMap<Integer, HashSet<Role>> usersRoles = getUsersRolesContainsUserId(mapListUserRoles);
+        return usersRoles;
+    }
+
+    private HashMap<Integer, HashSet<Role>> getUsersRolesContainsUserId(List<Map<String, Object>> mapListUserRoles) {
+        HashMap<Integer, HashSet<Role>> usersRoles = new HashMap<>();
+        for (Map<String, Object> mapUserRoles : mapListUserRoles) {
+            int user_id = (int)mapUserRoles.get("user_id");
+            String roleName = (String)mapUserRoles.get("role");
+            HashSet<Role> userRoles = usersRoles.getOrDefault(user_id, new HashSet<Role>());
+            userRoles.add(Role.valueOf(roleName));
+            usersRoles.putIfAbsent(user_id, userRoles);
+        }
+        return usersRoles;
+    }
+
+    private HashSet<Role> getUserRoles(int id) {
+        List<Map<String, Object>> mapListUserRoles = jdbcTemplate.queryForList("SELECT ur.user_id as user_id, ur.role as role FROM user_roles ur where user_id=?", id);
+        HashSet<Role> userRoles = getUsersRolesContainsUserId(mapListUserRoles).get(id);
+        return userRoles;
     }
 }
