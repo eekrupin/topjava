@@ -18,7 +18,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
 @RequestMapping(value = "/meals")
-public class MealController extends AbstractMealController{
+public class MealRestController extends AbstractMealController{
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String delete(HttpServletRequest request){
@@ -41,13 +41,13 @@ public class MealController extends AbstractMealController{
         return "mealForm";
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public String getAll(HttpServletRequest request){
         request.setAttribute("meals", super.getAll());
         return "meals";
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public String createUpdate(HttpServletRequest request){
         //request.setCharacterEncoding("UTF-8");
         Meal meal = new Meal(

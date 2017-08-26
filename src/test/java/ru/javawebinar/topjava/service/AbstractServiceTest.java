@@ -91,7 +91,7 @@ abstract public class AbstractServiceTest {
     }
 
     public boolean isNotJdbcProfile(){
-        return !Arrays.stream(environment.getActiveProfiles()).anyMatch(Profiles.JDBC::equals);
+        return Arrays.stream(environment.getActiveProfiles()).noneMatch(Profiles.JDBC::equals);
     }
 
 }
