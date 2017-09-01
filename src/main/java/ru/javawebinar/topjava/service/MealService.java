@@ -26,4 +26,5 @@ public interface MealService {
     Meal create(Meal meal, int userId);
 
     Meal getWithUser(int id, int userId);
+
 }
