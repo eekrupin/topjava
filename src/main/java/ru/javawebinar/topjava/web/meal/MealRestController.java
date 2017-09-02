@@ -64,7 +64,6 @@ public class MealRestController extends AbstractMealController {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
 
-    //work without conversion-service="conversionService" in spring-mvc.xml
     @GetMapping(value = "/filterBySeparatedDateTimeFormat", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MealWithExceed> getBetweenBySeparatedDateTimeFormat(@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
@@ -75,7 +74,6 @@ public class MealRestController extends AbstractMealController {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
 
-    //work without conversion-service="conversionService" in spring-mvc.xml
     @GetMapping(value = "/filterByDateTime", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MealWithExceed> getBetweenByDateTime(@RequestParam("startDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
                                            @RequestParam("endDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {

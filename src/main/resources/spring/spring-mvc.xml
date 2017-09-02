@@ -25,7 +25,9 @@
     </mvc:annotation-driven>
 
     <bean id="conversionService"
-          class="org.springframework.context.support.ConversionServiceFactoryBean">
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+          <!--https://stackoverflow.com/questions/13971279/register-a-custom-conversion-service-while-retaining-the-defaults-->
+          <!--class="org.springframework.context.support.ConversionServiceFactoryBean">-->
         <property name="converters">
             <set>
                 <bean class="ru.javawebinar.topjava.util.spring.converter.DateConverter"/>
