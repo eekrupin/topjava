@@ -89,7 +89,6 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetBetween() throws Exception {
-        //mockMvc.perform(get(REST_URL + "/filterByDateTime?startDateTime=2015-05-30T10:00&endDateTime=2015-05-30T13:00"))
         mockMvc.perform(get(REST_URL + "/filter?startDate=2015-05-30&endDate=2015-05-30&startTime=10:00&endTime=13:00"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -112,4 +111,15 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 ));
     }
 
+    @Test
+    public void testGetFilterByDateTime() throws Exception {
+        mockMvc.perform(get(REST_URL + "/filterByDateTime?startDateTime=2015-05-30T10:00&endDateTime=2015-05-30T13:00"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                // https://jira.spring.io/browse/SPR-14472
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MATCHER_WITH_EXCEED.contentListMatcher(
+                        MealsUtil.getWithExceeded(Arrays.asList(MEAL2, MEAL1), USER.getCaloriesPerDay())
+                ));
+    }
 }
