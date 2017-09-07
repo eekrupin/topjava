@@ -30,10 +30,11 @@
         <!--    Tests  -->
         <junit.version>4.12</junit.version>
         <hamcrest.version>1.3</hamcrest.version>
+        <jsonassert.version>1.5.0</jsonassert.version>
 
         <!-- Hibernate -->
         <hibernate.version>5.2.10.Final</hibernate.version>
-        <hibernate-validator.version>6.0.1.Final</hibernate-validator.version>
+        <hibernate-validator.version>6.0.2.Final</hibernate-validator.version>
         <javax-el.version>3.0.1-b08</javax-el.version>
 
         <!--Tools-->
@@ -265,6 +266,12 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>${jsonassert.version}</version>
             <scope>test</scope>
         </dependency>
 
