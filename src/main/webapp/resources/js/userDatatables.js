@@ -40,3 +40,14 @@ $(function () {
     });
     makeEditable();
 });
+
+function changeActive(id){
+    $.ajax({
+        url: ajaxUrl + "/changeActive/" + id,
+        type: "PUT",
+        success: function () {
+            updateTable();
+            successNoty("Change active");
+        }
+    });
+}

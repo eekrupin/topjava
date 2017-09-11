@@ -48,4 +48,10 @@ public abstract class AbstractUserController {
         log.info("getByEmail {}", email);
         return service.getByEmail(email);
     }
+
+    public void changeActive(int id){
+        log.info("changeActive {}", id);
+        service.changeActive(id);
+    }
+
 }

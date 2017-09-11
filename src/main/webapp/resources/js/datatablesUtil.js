@@ -1,7 +1,4 @@
 function makeEditable() {
-    // $(".delete").click(function (id) {
-    //     deleteRow($(this).attr("id"));
-    // });
 
     $(".edit").click(function () {
         editRow($(this).attr("id"));
@@ -11,7 +8,10 @@ function makeEditable() {
         save();
         return false;
     });
+    basisHandlers();
+}
 
+function basisHandlers() {
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
     });
