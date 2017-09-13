@@ -49,9 +49,9 @@ public abstract class AbstractUserController {
         return service.getByEmail(email);
     }
 
-    public void changeActive(int id){
-        log.info("changeActive {}", id);
-        service.changeActive(id);
+    public void changeActive(int id, boolean enabled){
+        log.info("changeActive {}, enabled {}", id, enabled);
+        service.changeActive(id, enabled);
     }
 
 }

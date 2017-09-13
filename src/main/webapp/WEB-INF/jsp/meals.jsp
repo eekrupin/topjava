@@ -21,30 +21,30 @@
                 <form class="form-horizontal" id="filter">
 
                     <div class="form-group">
-                        <label for="startDate" class="control-label col-xs-3"><spring:message code="meal.startDate"/></label>
-                        <div class="col-xs-9">
+                        <label for="startDate" class="control-label col-xs-2"><spring:message code="meal.startDate"/></label>
+                        <div class="col-xs-2">
                             <input type="date" class="form-control" id="startDate" name="startDate" placeholder="<spring:message code="meal.startDate"/>">
                         </div>
 
-                        <label for="startTime" class="control-label col-xs-3"><spring:message code="meal.startTime"/></label>
-                        <div class="col-xs-9">
+                        <label for="startTime" class="control-label col-xs-2"><spring:message code="meal.startTime"/></label>
+                        <div class="col-xs-2">
                             <input type="time" class="form-control" id="startTime" name="startTime" placeholder="<spring:message code="meal.startTime"/>">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="endDate" class="control-label col-xs-3"><spring:message code="meal.endDate"/></label>
-                        <div class="col-xs-9">
+                        <label for="endDate" class="control-label col-xs-2"><spring:message code="meal.endDate"/></label>
+                        <div class="col-xs-2">
                             <input type="date" class="form-control" id="endDate" name="endDate" placeholder="<spring:message code="meal.endDate"/>">
                         </div>
 
-                        <label for="endTime" class="control-label col-xs-3"><spring:message code="meal.endTime"/></label>
-                        <div class="col-xs-9">
+                        <label for="endTime" class="control-label col-xs-2"><spring:message code="meal.endTime"/></label>
+                        <div class="col-xs-2">
                             <input type="time" class="form-control" id="endTime" name="endTime" placeholder="<spring:message code="meal.endTime"/>">
                         </div>
                     </div>
-                    <a class="btn btn-primary" type="button" onclick="filterTable()"><spring:message code="meal.filter"/></a>
-                    <a class="btn btn-primary" type="button" onclick="clearFilter()"><spring:message code="common.clearFilter"/></a>
+                    <a class="btn btn-primary" type="button" onclick="updateTable()"><spring:message code="meal.filter"/></a>
+                    <a class="btn btn-primary" type="button" onclick="updateTable(true)"><spring:message code="common.clearFilter"/></a>
                 </form>
 
                 <a class="btn btn-primary" onclick="add()">

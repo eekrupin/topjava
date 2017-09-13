@@ -24,5 +24,5 @@ public interface UserService {
 
     User getWithMeals(int id);
 
-    void changeActive(int id) throws NotFoundException;;
+    void changeActive(int id, boolean enabled) throws NotFoundException;;
 }

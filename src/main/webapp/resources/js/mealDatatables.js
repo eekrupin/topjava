@@ -32,49 +32,24 @@ $(function () {
             ]
         ]
     });
-    addMealHandlers();
-    basisHandlers();
-});
+    makeEditable();
+ });
 
-function addMealHandlers(){
+function updateTable(clearFilter) {
 
-    $("#detailsForm").submit(function () {
-        saveMeal();
-        return false;
-    });
+    clearFilter = (typeof clearFilter !== 'undefined') ? clearFilter : false;
+    var form = $("#filter");
 
-    $(".edit").click(function () {
-        editRow($(this).attr("id"));
-    });
+    if (clearFilter===true){
+        $(form).find(":input").val("");
+    }
 
-}
-
-function saveMeal() {
-    var form = $("#detailsForm");
     $.ajax({
         type: "POST",
-        url: ajaxUrl,
+        url: ajaxUrl + "filter",
         data: form.serialize(),
-        success: function () {
-            $("#editRow").modal("hide");
-            filterTable();
-            successNoty("Saved");
+        success: function (data) {
+            datatableApi.clear().rows.add(data).draw();
         }
     });
-}
-
-function filterTable() {
-
-    $.get(ajaxUrl + "filter", {"startDate" : $(this).attr("startDate").value, "startTime" : $(this).attr("startTime").value,
-                               "endDate" : $(this).attr("endDate").value, "endTime" : $(this).attr("endTime").value}, function (data) {
-        datatableApi.clear().rows.add(data).draw();
-    });
-}
-
-function clearFilter() {
-    $(this).attr("startDate").value = null;
-    $(this).attr("startTime").value = null;
-    $(this).attr("endDate").value = null;
-    $(this).attr("endTime").value = null;
-    filterTable();
 }

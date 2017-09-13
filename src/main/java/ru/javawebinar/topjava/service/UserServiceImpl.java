@@ -74,9 +74,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @CacheEvict(value = "users", allEntries = true)
-    public void changeActive(int id) throws NotFoundException {
+    public void changeActive(int id, boolean enabled) throws NotFoundException {
         User user = checkNotFoundWithId(repository.get(id), id);
-        user.setEnabled(!user.isEnabled());
+        user.setEnabled(enabled);
         update(user);
     }
 

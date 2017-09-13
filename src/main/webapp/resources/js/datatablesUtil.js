@@ -8,17 +8,14 @@ function makeEditable() {
         save();
         return false;
     });
-    basisHandlers();
-}
 
-function basisHandlers() {
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
     });
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
-}
+  }
 
 function add() {
     $("#detailsForm").find(":input").val("");
@@ -39,12 +36,6 @@ function deleteRow(id) {
             updateTable();
             successNoty("Deleted");
         }
-    });
-}
-
-function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        datatableApi.clear().rows.add(data).draw();
     });
 }
 

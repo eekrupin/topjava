@@ -41,13 +41,24 @@ $(function () {
     makeEditable();
 });
 
-function changeActive(id){
+function changeActive(id, enabled){
     $.ajax({
-        url: ajaxUrl + "/changeActive/" + id,
-        type: "PUT",
+        url: ajaxUrl + "changeActive/" + id,
+        type: "POST",
+        data: "enabled=" + enabled,
         success: function () {
             updateTable();
             successNoty("Change active");
+        }
+    });
+}
+
+function updateTable() {
+
+    $.get({
+        url: ajaxUrl,
+        success: function (data) {
+            datatableApi.clear().rows.add(data).draw();
         }
     });
 }
