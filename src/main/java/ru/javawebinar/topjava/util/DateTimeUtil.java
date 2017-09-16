@@ -31,4 +31,12 @@ public class DateTimeUtil {
     public static LocalTime parseLocalTime(String str) {
         return StringUtils.isEmpty(str) ? null : LocalTime.parse(str);
     }
+
+    public static LocalDateTime parseLocalDateTime(String str) {
+        if (!str.contains("T")){
+            str = str.replace(" ", "T");
+        }
+        return StringUtils.isEmpty(str) ? null : LocalDateTime.parse(str);
+    }
+
 }
