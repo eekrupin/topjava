@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class MealTo extends BaseTo implements Serializable{
+public class MealTo extends BaseTo{
     private static final long serialVersionUID = 5L;
 
     @NotNull

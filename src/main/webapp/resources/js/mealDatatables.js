@@ -63,25 +63,24 @@ $(function () {
     });
 });
 
-$('#startDate').datetimepicker({
-    timepicker:false,
-    format:'Y-m-d'
-});
+setDatePicker($('#startDate'));
+setDatePicker($('#endDate'));
+setTimePicker($('#startTime'));
+setTimePicker($('#endTime'));
 
-$('#startTime').datetimepicker({
-    datepicker:false,
-    format:'H:i'
-});
+function setDatePicker(formElement) {
+    formElement.datetimepicker({
+        timepicker:false,
+        format:'Y-m-d'
+    });
+}
 
-$('#endDate').datetimepicker({
-    timepicker:false,
-    format:'Y-m-d'
-});
-
-$('#endTime').datetimepicker({
-    datepicker:false,
-    format:'H:i'
-});
+function setTimePicker(formElement) {
+    formElement.datetimepicker({
+        datepicker:false,
+        format:'H:i'
+    });
+}
 
 $('#dateTime').datetimepicker({
     format:'Y-m-d H:i'
