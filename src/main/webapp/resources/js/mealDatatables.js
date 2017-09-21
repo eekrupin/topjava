@@ -63,10 +63,8 @@ $(function () {
     });
 });
 
-setDatePicker($('#startDate'));
-setDatePicker($('#endDate'));
-setTimePicker($('#startTime'));
-setTimePicker($('#endTime'));
+setDatePicker($('#startDate, #endDate'));
+setTimePicker($('#startTime, #endTime'));
 
 function setDatePicker(formElement) {
     formElement.datetimepicker({
