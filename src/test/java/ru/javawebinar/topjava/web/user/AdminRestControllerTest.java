@@ -2,7 +2,10 @@ package ru.javawebinar.topjava.web.user;
 
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
@@ -117,4 +120,65 @@ public class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MATCHER.contentListMatcher(ADMIN, USER)));
     }
+
+    @Test
+    public void testNotValidCreate() throws Exception {
+        User user = new User(null, null, "newgmail.com", "newPass", 0, Role.ROLE_USER, Role.ROLE_ADMIN);
+        ResultActions action = mockMvc.perform(post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(user))
+                .with(userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                ;
+    }
+
+    @Test
+    public void testNotValidUpdate() throws Exception {
+        User updated = new User(USER);
+        updated.setName(null);
+        updated.setRoles(Collections.singletonList(Role.ROLE_ADMIN));
+        mockMvc.perform(put(REST_URL + USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated))
+                .with(userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+        ;
+
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void testCreateDuplicateByEmail() throws Exception {
+        //Пароль JsonUtil.writeValue срезает. Соответственно кормим json напрямую, иначе тоже 422, но по причине пароль пустой.
+        String user = "{\"name\":\"New\",\"email\":\"user@yandex.ru\",\"password\":\"password\",\"enabled\":true,\"registered\":\"2017-09-20T09:12:40.953+0000\",\"roles\":[\"ROLE_USER\",\"ROLE_ADMIN\"],\"caloriesPerDay\":2300}";
+        ResultActions actions = mockMvc.perform(post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(user));
+        //беда с транзакциями в тесте
+        actions.andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().json("{'cause':'Error duplicate email'}"))
+                ;
+
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void testUpdateDuplicateByEmail() throws Exception {
+        User updated = new User(USER);
+        updated.setEmail(ADMIN.getEmail());
+        mockMvc.perform(put(REST_URL + USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().json("{'cause':'Error duplicate email'}"))
+        ;
+
+    }
+
+
 }

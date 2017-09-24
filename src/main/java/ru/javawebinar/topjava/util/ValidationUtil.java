@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import ru.javawebinar.topjava.HasId;
+import ru.javawebinar.topjava.util.exception.DuplicateValueException;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.StringJoiner;
@@ -58,16 +59,18 @@ public class ValidationUtil {
         return result;
     }
 
-    public static ResponseEntity<String> getErrorResponse(BindingResult result) {
-        StringJoiner joiner = new StringJoiner("<br>");
-        result.getFieldErrors().forEach(
-                fe -> {
-                    String msg = fe.getDefaultMessage();
-                    if (!msg.startsWith(fe.getField())) {
-                        msg = fe.getField() + ' ' + msg;
-                    }
-                    joiner.add(msg);
-                });
-        return new ResponseEntity<>(joiner.toString(), HttpStatus.UNPROCESSABLE_ENTITY);
+    public static Boolean isCauseWithDuplicateEmail(Exception e) {
+        return e.getCause().getCause().getLocalizedMessage().contains("users_unique_email_idx");
     }
+
+    public static void throwThoughtfully(Exception e) {
+        if (isCauseWithDuplicateEmail(e)) {
+            String message = e.getCause().getCause().getLocalizedMessage();
+            throw new DuplicateValueException( message.substring(message.lastIndexOf("\n")), "error.DuplicateEmail");
+        }else {
+            //throw e; //не работает, ругается на "Unhandled exception type Exception", хотя в catch(в используемом методе) не ругался...
+            throw new RuntimeException(e);
+        }
+    }
+
 }

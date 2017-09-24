@@ -2,9 +2,12 @@ package ru.javawebinar.topjava.web.user;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.javawebinar.topjava.View;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
 import java.net.URI;
 import java.util.List;
@@ -27,17 +30,20 @@ public class AdminRestController extends AbstractUserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> createWithLocation(@RequestBody User user) {
-        User created = super.create(user);
-
+    public ResponseEntity<User> createWithLocation(@Validated(View.ValidatedRest.class) @RequestBody User user) {
+        try {
+            User created = super.create(user);
+            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path(REST_URL + "/{id}")
+                    .buildAndExpand(created.getId()).toUri();
+            return ResponseEntity.created(uriOfNewResource).body(created);
+        }catch (Exception e){
+            ValidationUtil.throwThoughtfully(e);
+        }
 //        HttpHeaders httpHeaders = new HttpHeaders();
 //        httpHeaders.setLocation(uriOfNewResource);
 
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
-
-        return ResponseEntity.created(uriOfNewResource).body(created);
+        return null;
     }
 
     @Override
@@ -48,8 +54,13 @@ public class AdminRestController extends AbstractUserController {
 
     @Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@RequestBody User user, @PathVariable("id") int id) {
-        super.update(user, id);
+    public void update(@Validated(View.ValidatedRest.class) @RequestBody User user, @PathVariable("id") int id) {
+        try {
+            super.update(user, id);
+        }catch (Exception e){
+            ValidationUtil.throwThoughtfully(e);
+        }
+
     }
 
     @Override
