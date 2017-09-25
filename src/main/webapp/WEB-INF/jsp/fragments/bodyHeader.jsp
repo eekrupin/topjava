@@ -6,19 +6,27 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <a href="meals" class="navbar-brand"><spring:message code="app.title"/></a>
+         <div class="container-collapse">
 
-        <div class="collapse navbar-collapse">
-            <form:form class="navbar-form navbar-right" action="logout" method="post">
-                <sec:authorize access="isAuthenticated()">
-                    <sec:authorize access="hasRole('ROLE_ADMIN')">
-                        <a class="btn btn-info" href="users"><spring:message code="user.title"/></a>
+             <%--ul is list--%>
+             <ul class="nav navbar-nav navbar-right">
+                 <%--li is list item--%>
+                 <li>
+                <form:form class="navbar-form" action="logout" method="post">
+                    <sec:authorize access="isAuthenticated()">
+                        <sec:authorize access="hasRole('ROLE_ADMIN')">
+                            <a class="btn btn-info" href="users"><spring:message code="user.title"/></a>
+                        </sec:authorize>
+                        <a class="btn btn-info" href="profile">${userTo.name} <spring:message code="app.profile"/></a>
+                        <button class="btn btn-primary" type="submit">
+                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                        </button>
                     </sec:authorize>
-                    <a class="btn btn-info" href="profile">${userTo.name} <spring:message code="app.profile"/></a>
-                    <button class="btn btn-primary" type="submit">
-                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-                    </button>
-                </sec:authorize>
-            </form:form>
-        </div>
+                </form:form>
+                 </li>
+                     <jsp:include page="changeLang.jsp"/>
+             </ul>
+
+         </div>
     </div>
 </div>
