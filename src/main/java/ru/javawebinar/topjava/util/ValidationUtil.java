@@ -63,11 +63,20 @@ public class ValidationUtil {
         return e.getCause().getCause().getLocalizedMessage().contains("users_unique_email_idx");
     }
 
+    public static Boolean isCauseWithDuplicateDateTime(Exception e) {
+        return e.getCause().getCause().getLocalizedMessage().contains("meals_unique_user_datetime_idx");
+    }
+
     public static void throwThoughtfully(Exception e) {
         if (isCauseWithDuplicateEmail(e)) {
             String message = e.getCause().getCause().getLocalizedMessage();
-            throw new DuplicateValueException( message.substring(message.lastIndexOf("\n")), "error.DuplicateEmail");
-        }else {
+            throw new DuplicateValueException(message.substring(message.lastIndexOf("\n")), "error.DuplicateEmail");
+        }
+         else if (isCauseWithDuplicateDateTime(e)) {
+            String message = e.getCause().getCause().getLocalizedMessage();
+            throw new DuplicateValueException(message.substring(message.lastIndexOf("\n")), "error.DuplicateDateTime");
+            }
+        else {
             //throw e; //не работает, ругается на "Unhandled exception type Exception", хотя в catch(в используемом методе) не ругался...
             throw new RuntimeException(e);
         }

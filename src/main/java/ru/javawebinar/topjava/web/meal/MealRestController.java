@@ -8,6 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.View;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -40,18 +41,27 @@ public class MealRestController extends AbstractMealController {
     @Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@Validated(View.ValidatedRest.class) @RequestBody Meal meal, @PathVariable("id") int id) {
-        super.update(meal, id);
+        try {
+            super.update(meal, id);
+        } catch (Exception e) {
+            ValidationUtil.throwThoughtfully(e);
+        }
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Meal> createWithLocation(@Validated(View.ValidatedRest.class) @RequestBody Meal meal) {
-        Meal created = super.create(meal);
+        try {
+            Meal created = super.create(meal);
 
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
+            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path(REST_URL + "/{id}")
+                    .buildAndExpand(created.getId()).toUri();
 
-        return ResponseEntity.created(uriOfNewResource).body(created);
+            return ResponseEntity.created(uriOfNewResource).body(created);
+        } catch (Exception e) {
+        ValidationUtil.throwThoughtfully(e);
+        }
+        return null;
     }
 
     @Override
