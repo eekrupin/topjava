@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.util.UserUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -86,16 +87,16 @@ public class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testUpdate() throws Exception {
-        User updated = new User(USER);
-        updated.setName("UpdatedName");
-        updated.setRoles(Collections.singletonList(Role.ROLE_ADMIN));
+        String updated = "{\"name\":\"UpdatedName\",\"email\":\"user3@gmail.com\",\"password\":\"password\",\"enabled\":true,\"registered\":\"2017-09-20T09:12:40.953+0000\",\"roles\":[\"ROLE_USER\",\"ROLE_ADMIN\"],\"caloriesPerDay\":2300}";
         mockMvc.perform(put(REST_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(updated)))
+                .content(updated))
                 .andExpect(status().isOk());
 
-        MATCHER.assertEquals(updated, userService.get(USER_ID));
+        User user = JsonUtil.readValue(updated, User.class);
+        user.setId(USER_ID);
+        MATCHER.assertEquals(user, userService.get(USER_ID));
     }
 
     @Test
@@ -149,7 +150,7 @@ public class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.NEVER)
     public void testCreateDuplicateByEmail() throws Exception {
         //Пароль JsonUtil.writeValue срезает. Соответственно кормим json напрямую, иначе тоже 422, но по причине пароль пустой.
         String user = "{\"name\":\"New\",\"email\":\"user@yandex.ru\",\"password\":\"password\",\"enabled\":true,\"registered\":\"2017-09-20T09:12:40.953+0000\",\"roles\":[\"ROLE_USER\",\"ROLE_ADMIN\"],\"caloriesPerDay\":2300}";
@@ -166,14 +167,13 @@ public class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.NEVER)
     public void testUpdateDuplicateByEmail() throws Exception {
-        User updated = new User(USER);
-        updated.setEmail(ADMIN.getEmail());
+        String user = "{\"name\":\"New\",\"email\":\"admin@gmail.com\",\"password\":\"password\",\"enabled\":true,\"registered\":\"2017-09-20T09:12:40.953+0000\",\"roles\":[\"ROLE_USER\",\"ROLE_ADMIN\"],\"caloriesPerDay\":2300}";
         mockMvc.perform(put(REST_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(updated)))
+                .content(user))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().json("{'cause':'Error duplicate email'}"))
         ;

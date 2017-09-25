@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.View;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
 @RestController
 @RequestMapping(ProfileRestController.REST_URL)
@@ -25,7 +26,11 @@ public class ProfileRestController extends AbstractUserController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@Validated(View.ValidatedRest.class) @RequestBody UserTo userTo) {
-        super.update(userTo, AuthorizedUser.id());
+        try {
+            super.update(userTo, AuthorizedUser.id());
+        }catch (Exception e){
+            ValidationUtil.throwThoughtfully(e);
+        }
     }
 
     @GetMapping(value = "/text")
