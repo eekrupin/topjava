@@ -3,6 +3,8 @@ package ru.javawebinar.topjava.web;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -50,6 +52,9 @@ abstract public class AbstractControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
+    protected MessageSource messageSource;
+
     @PostConstruct
     private void postConstruct() {
         mockMvc = MockMvcBuilders
@@ -66,4 +71,13 @@ abstract public class AbstractControllerTest {
             jpaUtil.clear2ndLevelHibernateCache();
         }
     }
+
+    public String getCauseDuplicateEmail() {
+        return messageSource.getMessage("error.DuplicateEmail", new Object[0], LocaleContextHolder.getLocale());
+    }
+
+    public String getCauseDuplicateDateTime() {
+        return messageSource.getMessage("error.DuplicateDateTime", new Object[0], LocaleContextHolder.getLocale());
+    }
+
 }

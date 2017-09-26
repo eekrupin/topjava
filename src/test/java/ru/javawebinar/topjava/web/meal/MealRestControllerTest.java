@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Propagation;
@@ -174,7 +175,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().json("{'cause':'Error duplicate date&time'}"))
+                .andExpect(content().json("{'cause':'" + getCauseDuplicateDateTime() + "'}"))
                 ;
 
     }
@@ -190,9 +191,8 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().json("{'cause':'Error duplicate date&time'}"))
+                .andExpect(content().json("{'cause':'" + getCauseDuplicateDateTime() + "'}"))
         ;
 
     }
-
 }

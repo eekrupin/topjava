@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web.user;
 
 import org.junit.Test;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.test.web.servlet.ResultActions;
@@ -161,7 +162,7 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         //беда с транзакциями в тесте
         actions.andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().json("{'cause':'Error duplicate email'}"))
+                .andExpect(content().json("{'cause':'" + getCauseDuplicateEmail() + "'}"))
                 ;
 
     }
@@ -175,10 +176,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN))
                 .content(user))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().json("{'cause':'Error duplicate email'}"))
+                .andExpect(content().json("{'cause':'" + getCauseDuplicateEmail() + "'}"))
         ;
 
     }
-
-
 }

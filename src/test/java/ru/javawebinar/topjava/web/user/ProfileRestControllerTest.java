@@ -80,7 +80,8 @@ public class ProfileRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().json("{'cause':'Error duplicate email'}"));
+                .andExpect(content().json("{'cause':'" + getCauseDuplicateEmail() + "'}"))
+                ;
     }
 
 }
