@@ -73,11 +73,11 @@ abstract public class AbstractControllerTest {
     }
 
     public String getCauseDuplicateEmail() {
-        return messageSource.getMessage("error.DuplicateEmail", new Object[0], LocaleContextHolder.getLocale());
+        return messageSource.getMessage("error.DuplicateEmail", null, LocaleContextHolder.getLocale());
     }
 
     public String getCauseDuplicateDateTime() {
-        return messageSource.getMessage("error.DuplicateDateTime", new Object[0], LocaleContextHolder.getLocale());
+        return messageSource.getMessage("error.DuplicateDateTime", null, LocaleContextHolder.getLocale());
     }
 
 }

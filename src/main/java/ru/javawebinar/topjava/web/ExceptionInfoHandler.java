@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.util.ValidationUtil;
@@ -19,17 +20,19 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import java.util.StringJoiner;
 
 @ControllerAdvice(annotations = RestController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
     private static Logger LOG = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     @Autowired
-    private static LocaleContextHolder localeContextHolder;
+    public ExceptionInfoHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     //  http://stackoverflow.com/a/22358422/548473
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY) //422
@@ -61,14 +64,44 @@ public class ExceptionInfoHandler {
         return logAndGetErrorInfo(req, e, true);
     }
 
-    private ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException) {
-        Locale locale = localeContextHolder.getLocale();
-        Throwable rootCause = ValidationUtil.getRootCause(e);
+    private ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception ex, boolean logException) {
+        Locale locale = LocaleContextHolder.getLocale();
+        Throwable rootCause = ValidationUtil.getRootCause(ex);
         if (logException) {
             LOG.error("Exception at request " + req.getRequestURL(), rootCause);
         } else {
             LOG.warn("Exception at request " + req.getRequestURL() + ": " + rootCause.toString());
         }
-        return new ErrorInfo(req.getRequestURL(), rootCause, messageSource, locale);
+
+        String cause;
+        String detail;
+        if (ex instanceof BindException) {
+            cause = messageSource.getMessage("error.fill", null, locale);
+            detail = getErrorsFromBindingResult( ((BindException) ex).getBindingResult() );
+        }
+        else if (ex instanceof DuplicateValueException) {
+            cause = messageSource.getMessage( ((DuplicateValueException)ex).type, null, locale );
+            detail = ex.getLocalizedMessage();
+        }
+        else {
+            cause = ex.getClass().getSimpleName();
+            detail = ex.getLocalizedMessage();
+        }
+
+        return new ErrorInfo(req.getRequestURL(), cause, detail);
     }
+
+    public static String getErrorsFromBindingResult(BindingResult result) {
+        StringJoiner joiner = new StringJoiner("<br>");
+        result.getFieldErrors().forEach(
+                fe -> {
+                    String msg = fe.getDefaultMessage();
+                    if (!msg.startsWith(fe.getField())) {
+                        msg = fe.getField() + ' ' + msg;
+                    }
+                    joiner.add(msg);
+                });
+        return joiner.toString();
+    }
+
 }

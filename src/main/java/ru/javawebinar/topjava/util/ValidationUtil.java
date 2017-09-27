@@ -1,13 +1,11 @@
 package ru.javawebinar.topjava.util;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import ru.javawebinar.topjava.HasId;
 import ru.javawebinar.topjava.util.exception.DuplicateValueException;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.util.StringJoiner;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ValidationUtil {
 
@@ -59,21 +57,18 @@ public class ValidationUtil {
         return result;
     }
 
-    public static Boolean isCauseWithDuplicateEmail(Exception e) {
-        return e.getCause().getCause().getLocalizedMessage().contains("users_unique_email_idx");
-    }
-
-    public static Boolean isCauseWithDuplicateDateTime(Exception e) {
-        return e.getCause().getCause().getLocalizedMessage().contains("meals_unique_user_datetime_idx");
+    public static Map<String, String> causesByErrors = new HashMap<>();
+    static {
+        causesByErrors.put("DuplicateEmail", "users_unique_email_idx");
+        causesByErrors.put("DuplicateDateTime", "meals_unique_user_datetime_idx");
     }
 
     public static void throwThoughtfully(Exception e) {
-        if (isCauseWithDuplicateEmail(e)) {
-            String message = e.getCause().getCause().getLocalizedMessage();
+        String message = getRootCause(e).getLocalizedMessage();
+        if ( message.contains(causesByErrors.get("DuplicateEmail")) ) {
             throw new DuplicateValueException(message.substring(message.lastIndexOf("\n")), "error.DuplicateEmail");
         }
-         else if (isCauseWithDuplicateDateTime(e)) {
-            String message = e.getCause().getCause().getLocalizedMessage();
+         else if ( message.contains(causesByErrors.get("DuplicateDateTime")) ) {
             throw new DuplicateValueException(message.substring(message.lastIndexOf("\n")), "error.DuplicateDateTime");
             }
         else {
